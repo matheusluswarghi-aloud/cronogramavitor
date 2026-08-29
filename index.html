@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cronograma de entregas — ECG Descomplicado</title>
+<meta name="description" content="Cronograma de entregas do projeto ECG Descomplicado — pesquisa, estratégia, nova VSL e primeira leva de criativos.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+  :root{
+    --paper:#EEEFF1;
+    --surface:#FFFFFF;
+    --ink:#13161B;
+    --ink-2:#3C434D;
+    --muted:#767D88;
+    --line:#DBDDE1;
+    --line-strong:#BCC0C7;
+    --accent:#A62B26;
+    --accent-soft:#F5E8E7;
+    --sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0D0F13;
+      --surface:#161A20;
+      --ink:#ECEEF1;
+      --ink-2:#B4BAC3;
+      --muted:#7F8794;
+      --line:#242932;
+      --line-strong:#39414D;
+      --accent:#EE6A60;
+      --accent-soft:#241819;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0D0F13;
+    --surface:#161A20;
+    --ink:#ECEEF1;
+    --ink-2:#B4BAC3;
+    --muted:#7F8794;
+    --line:#242932;
+    --line-strong:#39414D;
+    --accent:#EE6A60;
+    --accent-soft:#241819;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.58;
+    -webkit-font-smoothing:antialiased;
+  }
+  p{margin:0}
+  ul,ol{margin:0;padding:0;list-style:none}
+  h1,h2{margin:0;font-weight:600;text-wrap:balance}
+
+  .wrap{max-width:860px;margin:0 auto;padding:0 32px}
+
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .kicker{
+    font-family:var(--mono);
+    font-size:.68rem;
+    font-weight:500;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ── topo ─────────────────────────────────────────── */
+  header{padding:76px 0 30px}
+  .rule-top{height:3px;background:var(--accent);width:52px;margin-bottom:26px}
+  h1{
+    font-size:clamp(2.15rem,5.4vw,3.15rem);
+    line-height:1.03;
+    letter-spacing:-.028em;
+    font-weight:700;
+    margin:12px 0 16px;
+  }
+  .sub{color:var(--ink-2);max-width:54ch;font-size:1.04rem}
+  .sub b{color:var(--ink);font-weight:600}
+
+  /* ── faixa de dias ────────────────────────────────── */
+  .calendar{margin:38px 0 8px}
+  .months{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    margin-bottom:7px;
+  }
+  .months span{
+    font-family:var(--mono);
+    font-size:.62rem;
+    font-weight:500;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    padding-left:2px;
+  }
+  .months .m1{grid-column:span 3}
+  .months .m2{grid-column:span 9;border-left:1px solid var(--line-strong);padding-left:8px}
+
+  .strip{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    border:1px solid var(--line-strong);
+    background:var(--surface);
+  }
+  .strip li{
+    border-left:1px solid var(--line);
+    padding:9px 0 10px;
+    text-align:center;
+    position:relative;
+    min-width:0;
+  }
+  .strip li:first-child{border-left:0}
+  .strip .wd{
+    display:block;
+    font-family:var(--mono);
+    font-size:.58rem;
+    font-weight:500;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .strip .dd{
+    display:block;
+    font-family:var(--mono);
+    font-size:.94rem;
+    font-weight:500;
+    color:var(--ink-2);
+    line-height:1.35;
+    font-variant-numeric:tabular-nums;
+  }
+  .strip .tag{
+    display:block;
+    font-family:var(--mono);
+    font-size:.56rem;
+    font-weight:700;
+    letter-spacing:.08em;
+    color:var(--accent);
+    line-height:1;
+    margin-top:2px;
+  }
+  .strip .due{background:var(--accent-soft)}
+  .strip .due .dd{color:var(--accent);font-weight:700}
+  .strip .due::before{
+    content:"";
+    position:absolute;
+    inset:0 0 auto 0;
+    height:2px;
+    background:var(--accent);
+  }
+  .strip .due.done{background:transparent}
+  .strip .due.done .dd,.strip .due.done .tag{color:var(--muted);font-weight:500}
+  .strip .due.done::before{background:var(--line-strong)}
+  .strip .today .wd{color:var(--ink)}
+  .strip .today .dd{
+    color:var(--ink);
+    font-weight:700;
+    text-decoration:underline;
+    text-underline-offset:3px;
+    text-decoration-thickness:1.5px;
+  }
+  .legend{
+    margin-top:9px;
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    flex-wrap:wrap;
+    font-family:var(--mono);
+    font-size:.63rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ── progresso ────────────────────────────────────── */
+  .progress{
+    margin-top:34px;
+    padding-top:18px;
+    border-top:1px solid var(--line-strong);
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .progress .count{
+    font-family:var(--mono);
+    font-size:.7rem;
+    font-weight:500;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .segs{display:flex;gap:4px;flex:1 1 140px;min-width:120px}
+  .segs i{
+    flex:1;
+    height:3px;
+    background:var(--line-strong);
+    transition:background .25s ease;
+  }
+  .segs i.on{background:var(--accent)}
+
+  /* ── fases ────────────────────────────────────────── */
+  .track{margin-top:14px}
+
+  .phase{
+    display:grid;
+    grid-template-columns:24px 1fr;
+    gap:22px;
+    align-items:start;
+    padding:30px 10px 32px 4px;
+    border-top:1px solid var(--line);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .18s ease;
+  }
+  @media (hover:hover){ .phase:hover{background:var(--surface)} }
+  .phase input{position:absolute;opacity:0;width:0;height:0}
+
+  .box{
+    width:24px;height:24px;
+    margin-top:1px;
+    border:1.5px solid var(--line-strong);
+    border-radius:3px;
+    background:var(--surface);
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+    transition:background .18s ease,border-color .18s ease;
+  }
+  .box svg{
+    width:13px;height:13px;
+    stroke:var(--surface);stroke-width:2.8;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;
+    opacity:0;transform:scale(.55);
+    transition:opacity .16s ease,transform .16s ease;
+  }
+  .phase input:focus-visible + .box{outline:2px solid var(--accent);outline-offset:3px}
+  .phase.done .box{background:var(--accent);border-color:var(--accent)}
+  .phase.done .box svg{opacity:1;transform:scale(1)}
+
+  .hdr{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:12px;
+    margin-bottom:9px;
+  }
+  .hdr .num{
+    font-family:var(--mono);
+    font-size:.68rem;
+    font-weight:700;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+  .hdr .leader{border-top:1px dotted var(--line-strong);height:1px}
+  .hdr .date{
+    font-family:var(--mono);
+    font-size:.68rem;
+    font-weight:500;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    white-space:nowrap;
+  }
+
+  h2{font-size:1.42rem;line-height:1.18;letter-spacing:-.017em;margin-bottom:15px}
+
+  .items li{
+    display:grid;
+    grid-template-columns:16px 1fr;
+    align-items:start;
+    font-size:.97rem;
+    line-height:1.5;
+    color:var(--ink-2);
+    padding:3px 0;
+  }
+  .items li::before{
+    content:"";
+    width:5px;height:5px;
+    margin-top:.65em;
+    background:var(--line-strong);
+  }
+  .items li b{color:var(--ink);font-weight:600}
+
+  .note{
+    margin-top:11px;
+    font-size:.87rem;
+    color:var(--muted);
+    padding-left:16px;
+    border-left:2px solid var(--line-strong);
+  }
+
+  .deliver{
+    margin-top:17px;
+    display:flex;
+    gap:11px;
+    align-items:baseline;
+    flex-wrap:wrap;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-left:3px solid var(--accent);
+    padding:11px 15px;
+    font-size:.93rem;
+    color:var(--ink);
+  }
+  .deliver span{
+    font-family:var(--mono);
+    font-size:.62rem;
+    font-weight:700;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--accent);
+    white-space:nowrap;
+  }
+
+  .phase.done h2{
+    color:var(--muted);
+    text-decoration:line-through;
+    text-decoration-color:var(--line-strong);
+    text-decoration-thickness:1.5px;
+  }
+  .phase.done .items li,.phase.done .note{color:var(--muted)}
+  .phase.done .items li b{color:var(--muted);font-weight:500}
+  .phase.done .deliver{opacity:.55;border-left-color:var(--line-strong)}
+  .phase.done .hdr .num{color:var(--muted)}
+
+  /* ── rodapé ───────────────────────────────────────── */
+  footer{
+    margin-top:10px;
+    padding:24px 0 72px;
+    border-top:1px solid var(--line-strong);
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  footer p{
+    font-family:var(--mono);
+    font-size:.66rem;
+    font-weight:500;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  footer p b{color:var(--ink-2);font-weight:700}
+
+  @media (prefers-reduced-motion:reduce){ *{transition:none !important} }
+
+  @media (max-width:760px){
+    body{font-size:16px}
+    .wrap{padding:0 20px}
+    header{padding:52px 0 24px}
+    .phase{grid-template-columns:22px 1fr;gap:15px;padding:26px 0 28px}
+    .box{width:22px;height:22px}
+    .box svg{width:12px;height:12px}
+    .strip li{padding:8px 0 9px}
+    .strip .dd{font-size:.86rem}
+    .strip .wd{font-size:.54rem}
+    .strip .tag{font-size:.52rem}
+    .deliver{flex-direction:column;gap:5px}
+  }
+
+  @media (max-width:430px){
+    .wrap{padding:0 15px}
+    header{padding:42px 0 20px}
+    h1{font-size:clamp(1.85rem,8.4vw,2.4rem)}
+    h2{font-size:1.24rem}
+    .hdr{grid-template-columns:auto 1fr;row-gap:4px}
+    .hdr .leader{display:none}
+    .hdr .date{grid-column:1 / -1}
+    .items li{font-size:.94rem}
+    .strip .dd{font-size:.78rem}
+    .legend{flex-direction:column;gap:5px}
+    footer{flex-direction:column;gap:7px}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="rule-top"></div>
+    <p class="kicker">ECG Descomplicado · Dr. Vitor Coutinho</p>
+    <h1>Cronograma de entregas</h1>
+    <p class="sub">Pesquisa de mercado, estratégia e oferta, a nova VSL e a primeira leva de criativos. Quatro entregas, <b>tudo na mão de vocês até quarta, 9 de setembro</b>.</p>
+
+    <div class="calendar">
+      <div class="months">
+        <span class="m1">Agosto</span>
+        <span class="m2">Setembro</span>
+      </div>
+      <ol class="strip">
+        <li class="today"><span class="wd">Sáb</span><span class="dd">29</span></li>
+        <li><span class="wd">Dom</span><span class="dd">30</span></li>
+        <li class="due" data-key="ecg-f1"><span class="wd">Seg</span><span class="dd">31</span><span class="tag">F1</span></li>
+        <li><span class="wd">Ter</span><span class="dd">01</span></li>
+        <li class="due" data-key="ecg-f2"><span class="wd">Qua</span><span class="dd">02</span><span class="tag">F2</span></li>
+        <li><span class="wd">Qui</span><span class="dd">03</span></li>
+        <li><span class="wd">Sex</span><span class="dd">04</span></li>
+        <li><span class="wd">Sáb</span><span class="dd">05</span></li>
+        <li class="due" data-key="ecg-f3"><span class="wd">Dom</span><span class="dd">06</span><span class="tag">F3</span></li>
+        <li><span class="wd">Seg</span><span class="dd">07</span></li>
+        <li><span class="wd">Ter</span><span class="dd">08</span></li>
+        <li class="due" data-key="ecg-f4"><span class="wd">Qua</span><span class="dd">09</span><span class="tag">F4</span></li>
+      </ol>
+      <div class="legend">
+        <span>Dias em destaque = data de entrega</span>
+        <span>12 dias corridos</span>
+      </div>
+    </div>
+
+    <div class="progress">
+      <span class="count" id="count">0 de 4 entregues</span>
+      <span class="segs" id="segs"><i></i><i></i><i></i><i></i></span>
+    </div>
+  </header>
+
+  <div class="track">
+
+    <label class="phase" data-key="ecg-f1">
+      <input type="checkbox">
+      <span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4,12.5 9.5,18 20,6.5"></polyline></svg></span>
+      <div>
+        <div class="hdr">
+          <span class="num">Fase 01</span>
+          <span class="leader"></span>
+          <span class="date">Segunda · 31 de agosto</span>
+        </div>
+        <h2>Pesquisa de mercado</h2>
+        <ul class="items">
+          <li><span><b>Mapeamento de concorrentes</b> — quem anuncia para o mesmo público, com qual promessa, oferta e preço</span></li>
+          <li><span><b>Persona compradora</b> — quem realmente tira o cartão: médico, interno, estudante ou enfermeiro</span></li>
+          <li><span><b>Dores</b> — o que trava, o que dá medo e o que constrange no dia a dia</span></li>
+          <li><span><b>Desejos</b> — a transformação que essa pessoa quer comprar</span></li>
+          <li><span><b>Voz do cliente</b> — a linguagem literal que o público usa para descrever o problema</span></li>
+          <li><span><b>Objeções e crenças</b> — o que faz essa pessoa adiar ou desistir da compra</span></li>
+          <li><span><b>Nível de consciência e sofisticação</b> — o que o mercado já prometeu para esse público e o quanto ele está cansado de ouvir</span></li>
+        </ul>
+        <p class="deliver"><span>Entrega</span> Documento de pesquisa com concorrentes, persona e mapa de dores, desejos e objeções</p>
+      </div>
+    </label>
+
+    <label class="phase" data-key="ecg-f2">
+      <input type="checkbox">
+      <span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4,12.5 9.5,18 20,6.5"></polyline></svg></span>
+      <div>
+        <div class="hdr">
+          <span class="num">Fase 02</span>
+          <span class="leader"></span>
+          <span class="date">Quarta · 2 de setembro</span>
+        </div>
+        <h2>Estratégia e oferta</h2>
+        <ul class="items">
+          <li><span><b>Promessa central</b></span></li>
+          <li><span><b>Mecanismo único do problema</b> — por que a pessoa ainda trava mesmo tendo estudado</span></li>
+          <li><span><b>Mecanismo único da solução</b> — o que só este método resolve</span></li>
+          <li><span><b>Oferta completa</b> — entregável principal, bônus e ancoragem de preço</span></li>
+        </ul>
+        <p class="note">O nome do produto permanece <b>ECG Descomplicado</b>. Nada de renomear o que o mercado já reconhece.</p>
+        <p class="deliver"><span>Entrega</span> Documento de estratégia com promessa, mecanismos e oferta mapeados</p>
+      </div>
+    </label>
+
+    <label class="phase" data-key="ecg-f3">
+      <input type="checkbox">
+      <span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4,12.5 9.5,18 20,6.5"></polyline></svg></span>
+      <div>
+        <div class="hdr">
+          <span class="num">Fase 03</span>
+          <span class="leader"></span>
+          <span class="date">Domingo · 6 de setembro</span>
+        </div>
+        <h2>VSL completa</h2>
+        <ul class="items">
+          <li><span>Lead 1</span></li>
+          <li><span>Lead 2</span></li>
+          <li><span>Lead 3</span></li>
+          <li><span><b>Corpo completo da VSL</b></span></li>
+        </ul>
+        <p class="note">Três leads para teste. O corpo é único — troca-se só a abertura para descobrir qual entrada segura melhor o primeiro minuto.</p>
+        <p class="deliver"><span>Entrega</span> Roteiro pronto para gravar</p>
+      </div>
+    </label>
+
+    <label class="phase" data-key="ecg-f4">
+      <input type="checkbox">
+      <span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4,12.5 9.5,18 20,6.5"></polyline></svg></span>
+      <div>
+        <div class="hdr">
+          <span class="num">Fase 04</span>
+          <span class="leader"></span>
+          <span class="date">Quarta · 9 de setembro</span>
+        </div>
+        <h2>Anúncios</h2>
+        <ul class="items">
+          <li><span><b>15 criativos</b> para a primeira leva de teste</span></li>
+        </ul>
+        <p class="deliver"><span>Entrega</span> Roteiros dos criativos</p>
+      </div>
+    </label>
+
+  </div>
+
+  <footer>
+    <p><b>Matheus Luswarghi</b> · Estratégia e copy</p>
+    <p>Gravação, edição e subida de campanha ficam fora deste cronograma</p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var phases = [].slice.call(document.querySelectorAll('.phase'));
+    var count = document.getElementById('count');
+    var segs = [].slice.call(document.querySelectorAll('#segs i'));
+
+    function read(key) {
+      try { return localStorage.getItem(key) === '1'; } catch (e) { return false; }
+    }
+    function write(key, value) {
+      try { localStorage.setItem(key, value ? '1' : '0'); } catch (e) {}
+    }
+    function render() {
+      var done = 0;
+      phases.forEach(function (phase) {
+        var on = phase.querySelector('input').checked;
+        phase.classList.toggle('done', on);
+        var cell = document.querySelector('.strip [data-key="' + phase.dataset.key + '"]');
+        if (cell) cell.classList.toggle('done', on);
+        if (on) done++;
+      });
+      count.textContent = done + ' de ' + phases.length + ' entregues';
+      segs.forEach(function (seg, i) { seg.classList.toggle('on', i < done); });
+    }
+
+    phases.forEach(function (phase) {
+      var input = phase.querySelector('input');
+      input.checked = read(phase.dataset.key);
+      input.addEventListener('change', function () {
+        write(phase.dataset.key, input.checked);
+        render();
+      });
+    });
+
+    render();
+  })();
+</script>
+
+</body>
+</html>
