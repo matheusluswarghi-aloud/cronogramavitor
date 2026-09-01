@@ -471,7 +471,7 @@
   <div class="track">
 
     <label class="phase" data-key="ecg-f1">
-      <input type="checkbox">
+      <input type="checkbox" checked>
       <span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4,12.5 9.5,18 20,6.5"></polyline></svg></span>
       <div>
         <div class="hdr">
@@ -567,8 +567,11 @@
     var count = document.getElementById('count');
     var segs = [].slice.call(document.querySelectorAll('#segs i'));
 
-    function read(key) {
-      try { return localStorage.getItem(key) === '1'; } catch (e) { return false; }
+    function read(key, fallback) {
+      try {
+        var v = localStorage.getItem(key);
+        return v === null ? fallback : v === '1';
+      } catch (e) { return fallback; }
     }
     function write(key, value) {
       try { localStorage.setItem(key, value ? '1' : '0'); } catch (e) {}
@@ -588,7 +591,7 @@
 
     phases.forEach(function (phase) {
       var input = phase.querySelector('input');
-      input.checked = read(phase.dataset.key);
+      input.checked = read(phase.dataset.key, input.checked);
       input.addEventListener('change', function () {
         write(phase.dataset.key, input.checked);
         render();
