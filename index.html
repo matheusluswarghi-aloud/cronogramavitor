@@ -77,8 +77,30 @@
     color:var(--muted);
   }
 
+  /* ── abas de navegação ────────────────────────────── */
+  .tabs{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb,var(--paper) 86%,transparent);
+    backdrop-filter:saturate(180%) blur(14px);
+    -webkit-backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .tabs ul{display:flex;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+  .tabs ul::-webkit-scrollbar{display:none}
+  .tabs a{
+    display:block;padding:15px 0 13px;margin-right:28px;
+    font-family:var(--mono);font-size:.66rem;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    border-bottom:2px solid transparent;white-space:nowrap;
+    text-decoration:none;
+    transition:color .18s ease,border-color .18s ease;
+  }
+  .tabs a:hover{color:var(--ink);border-bottom-color:var(--line-strong)}
+  .tabs a[aria-current="page"]{color:var(--accent);border-bottom-color:var(--accent)}
+  .tabs li:last-child a{margin-right:0}
+
   /* ── topo ─────────────────────────────────────────── */
-  header{padding:76px 0 30px}
+  header{padding:52px 0 30px}
   .rule-top{height:3px;background:var(--accent);width:52px;margin-bottom:26px}
   h1{
     font-size:clamp(2.15rem,5.4vw,3.15rem);
@@ -363,7 +385,7 @@
   @media (max-width:760px){
     body{font-size:16px}
     .wrap{padding:0 20px}
-    header{padding:52px 0 24px}
+    header{padding:40px 0 24px}
     .phase{grid-template-columns:22px 1fr;gap:15px;padding:26px 0 28px}
     .box{width:22px;height:22px}
     .box svg{width:12px;height:12px}
@@ -376,7 +398,7 @@
 
   @media (max-width:430px){
     .wrap{padding:0 15px}
-    header{padding:42px 0 20px}
+    header{padding:32px 0 20px}
     h1{font-size:clamp(1.85rem,8.4vw,2.4rem)}
     h2{font-size:1.24rem}
     .hdr{grid-template-columns:auto 1fr;row-gap:4px}
@@ -390,6 +412,22 @@
 </style>
 </head>
 <body>
+
+<!-- ─────────────────────────────────────────────────────────────
+     ABAS · para adicionar uma página nova ao projeto, basta somar
+     um <li> abaixo. A aba da página em que se está leva
+     aria-current="page" — é o que a pinta de vermelho.
+     Este mesmo bloco vive em todas as páginas do projeto: ao mudar
+     as abas aqui, replicar nas demais.
+     ───────────────────────────────────────────────────────────── -->
+<nav class="tabs">
+  <div class="wrap">
+    <ul>
+      <li><a href="https://luswarghi.com/cronogramavitor/" aria-current="page">Cronograma de entregas</a></li>
+      <li><a href="https://luswarghi.com/ecgcoutinho/">Pesquisa de mercado</a></li>
+    </ul>
+  </div>
+</nav>
 
 <div class="wrap">
 
